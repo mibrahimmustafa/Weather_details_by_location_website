@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  
+  <!-- SEO & Social Meta Tags -->
+  <title>أجواء · Ajwaa | الطقس والوقت، أينما كنت</title>
+  <meta name="description" content="تطبيق أجواء (Ajwaa) لعرض تفاصيل الطقس المباشرة، التوقيت المحلي الحي، والأعاصير، وجودة الهواء والغبار والأمطار لأي مدينة في العالم.">
+  <meta name="author" content="Mohamed Ibrahim Mustafa">
+  <meta name="theme-color" content="#0B1B33">
+  
+  <!-- Mobile & PWA Optimization -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="أجواء · Ajwaa">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/atmosphere.css">
+  <link rel="stylesheet" href="css/motion.css">
+
+  <style>
+    /* First paint bootstrap loader */
+    #bootstrapLoader {
+      position: fixed;
+      inset: 0;
+      background-color: var(--bg-app);
+      background-image: var(--bg-gradient);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      transition: opacity 400ms ease, visibility 400ms ease;
+    }
+
+    #bootstrapLoader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-logo-pulse {
+      animation: pulseSun 3s ease-in-out infinite alternate;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- (A) Bootstrap Loader -->
+  <div id="bootstrapLoader" aria-hidden="true">
+    <div class="loader-logo-pulse">
+      <svg viewBox="0 0 120 120" width="76" height="76" fill="none">
+        <circle cx="56" cy="40" r="22" fill="#F2A65A" />
+        <line x1="56" y1="40" x2="48" y2="33" stroke="#0B1B33" stroke-width="2.5" stroke-linecap="round" />
+        <line x1="56" y1="40" x2="67" y2="34" stroke="#0B1B33" stroke-width="2.2" stroke-linecap="round" />
+        <path d="M42 80 H82 A15 15 0 0 0 82 50 A13 13 0 0 0 70 52 A20 20 0 0 0 35 62 A15 15 0 0 0 42 80 Z" fill="#FFFFFF" />
+        <circle cx="50" cy="88" r="3.5" fill="#49B7D8" />
+        <circle cx="68" cy="92" r="3.5" fill="#2E8B7A" />
+      </svg>
+    </div>
+    <div style="font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg, var(--gold-500), var(--teal-300)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+      أجواء · Ajwaa
+    </div>
+    <div style="font-size: 0.85rem; color: var(--text-muted);">
+      الطقس والوقت، أينما كنت
+    </div>
+  </div>
+
+  <!-- (B) Sticky Header Mount -->
+  <div id="headerMount"></div>
+
+  <!-- App Main Content Container -->
+  <main class="app-container">
+    <!-- (D) Offline Banner Mount -->
+    <div id="offlineBannerMount" style="display: none;"></div>
+
+    <!-- Error Screen Mount -->
+    <div id="errorMount" style="display: none;"></div>
+
+    <!-- Main Live Content Mount -->
+    <div id="mainContentMount" style="display: flex; flex-direction: column; gap: var(--space-6);">
+      <!-- (C) Hero Card Mount -->
+      <section id="heroMount" aria-label="Hero Weather Card"></section>
+
+      <!-- (E) Alerts Mount -->
+      <section id="alertsMount" aria-label="Weather Alerts"></section>
+
+      <!-- (F) Hourly Forecast Mount -->
+      <section id="hourlyMount" aria-label="24-Hour Forecast"></section>
+
+      <!-- (G) Rain and Dust Dual Card Mount -->
+      <section id="rainDustMount" aria-label="Rain and Dust Details"></section>
+
+      <!-- (H) Weather Details Grid Mount -->
+      <section id="detailsMount" aria-label="Detailed Weather Metrics"></section>
+
+      <!-- (I) Sun Path Arc Mount -->
+      <section id="sunPathMount" aria-label="Solar Path Arc"></section>
+
+      <!-- (J) Cyclones Mount -->
+      <section id="cyclonesMount" aria-label="Active Cyclones"></section>
+
+      <!-- (K) 7-Day Forecast Mount -->
+      <section id="forecast7Mount" aria-label="7-Day Weekly Forecast"></section>
+    </div>
+
+    <!-- (L) Footer Mount -->
+    <div id="footerMount"></div>
+  </main>
+
+  <!-- (S) Sheets & Modal Dialogs Mount -->
+  <div id="sheetMount"></div>
+
+  <!-- JavaScript Modules in Dependency Order -->
+  <script src="js/config.js"></script>
+  <script src="js/domain/units.js"></script>
+  <script src="js/domain/conditions.js"></script>
+  <script src="js/domain/levels.js"></script>
+  <script src="js/domain/geo.js"></script>
+  <script src="js/domain/alerts.js"></script>
+  <script src="js/api/http.js"></script>
+  <script src="js/api/forecast.js"></script>
+  <script src="js/api/airquality.js"></script>
+  <script src="js/api/geocoding.js"></script>
+  <script src="js/api/storms.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/format.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/components/hero.js"></script>
+  <script src="js/components/alerts.js"></script>
+  <script src="js/components/hourly.js"></script>
+  <script src="js/components/rainDust.js"></script>
+  <script src="js/components/details.js"></script>
+  <script src="js/components/sunPath.js"></script>
+  <script src="js/components/cyclones.js"></script>
+  <script src="js/components/forecast7.js"></script>
+  <script src="js/components/sheets.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Bootstrap Loader Dismiss Script -->
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('bootstrapLoader');
+        if (loader) loader.classList.add('hidden');
+      }, 350);
+    });
+  </script>
+</body>
+</html>

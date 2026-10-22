@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%" fill="none" role="img" aria-label="أجواء · Ajwaa Logo">
+  <defs>
+    <!-- Sun Gradient -->
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD166" />
+      <stop offset="60%" stop-color="#F2A65A" />
+      <stop offset="100%" stop-color="#E07A28" />
+    </linearGradient>
+
+    <!-- Sun Glow Filter -->
+    <filter id="sunGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Cloud Gradient -->
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#D7E6F3" />
+    </linearGradient>
+
+    <!-- Cloud Drop Shadow -->
+    <filter id="cloudShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0B1B33" flood-opacity="0.25" />
+    </filter>
+
+    <!-- Turquoise Raindrop Gradient -->
+    <linearGradient id="rainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#49B7D8" />
+      <stop offset="100%" stop-color="#2E8B7A" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sun Rays (Subtle & Modern) -->
+  <g stroke="#F2A65A" stroke-width="3" stroke-linecap="round" opacity="0.85">
+    <line x1="56" y1="10" x2="56" y2="16" />
+    <line x1="56" y1="64" x2="56" y2="70" />
+    <line x1="26" y1="40" x2="32" y2="40" />
+    <line x1="80" y1="40" x2="86" y2="40" />
+    <line x1="35" y1="19" x2="39" y2="23" />
+    <line x1="73" y1="57" x2="77" y2="61" />
+    <line x1="35" y1="61" x2="39" y2="57" />
+    <line x1="73" y1="23" x2="77" y2="19" />
+  </g>
+
+  <!-- Sun Body (Sun + Clock) -->
+  <circle cx="56" cy="40" r="22" fill="url(#sunGrad)" filter="url(#sunGlow)" />
+  
+  <!-- Clock Face details on Sun -->
+  <!-- Center Pin -->
+  <circle cx="56" cy="40" r="2.5" fill="#0B1B33" />
+  <!-- Clock Hour Hand (pointing towards 10 o'clock) -->
+  <line x1="56" y1="40" x2="47" y2="31" stroke="#0B1B33" stroke-width="2.6" stroke-linecap="round" />
+  <!-- Clock Minute Hand (pointing towards 2 o'clock / 10 past) -->
+  <line x1="56" y1="40" x2="68" y2="33" stroke="#0B1B33" stroke-width="2.2" stroke-linecap="round" />
+  <!-- Dial Ticks -->
+  <circle cx="56" cy="22" r="1.2" fill="#0B1B33" opacity="0.6" />
+  <circle cx="74" cy="40" r="1.2" fill="#0B1B33" opacity="0.6" />
+  <circle cx="38" cy="40" r="1.2" fill="#0B1B33" opacity="0.6" />
+
+  <!-- Cloud Passing Underneath Sun -->
+  <path d="M42 82 H84 A16 16 0 0 0 84 50 A14 14 0 0 0 71 52 A22 22 0 0 0 34 62 A16 16 0 0 0 42 82 Z"
+        fill="url(#cloudGrad)" filter="url(#cloudShadow)" />
+
+  <!-- Raindrop 1 (Turquoise) -->
+  <path d="M48 90 C48 87 53 82 53 82 C53 82 58 87 58 90 A5 5 0 0 1 48 90 Z" fill="url(#rainGrad)" />
+
+  <!-- Raindrop 2 (Turquoise, slightly offset) -->
+  <path d="M68 95 C68 92 73 87 73 87 C73 87 78 92 78 95 A5 5 0 0 1 68 95 Z" fill="url(#rainGrad)" />
+</svg>

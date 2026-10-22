@@ -1,0 +1,236 @@
+/**
+ * Ajwaa (أجواء) Layout CSS
+ * Header, App Container, Section Grids, and Responsive Layouts.
+ */
+
+/* Main App Container */
+.app-container {
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+  padding-block-end: var(--space-12);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ========================================================
+   HEADER (Sticky)
+   ======================================================== */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--header-height);
+  background: var(--surface-overlay);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border-block-end: 1px solid var(--border-subtle);
+  transition: background var(--transition-normal), border-color var(--transition-normal);
+}
+
+.header-inner {
+  max-width: var(--content-max-width);
+  height: 100%;
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.brand-logo-wrap {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-spring);
+}
+
+.brand-group:hover .brand-logo-wrap {
+  transform: rotate(5deg) scale(1.05);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--gold-500) 0%, var(--teal-300) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.15;
+}
+
+.brand-tagline {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ========================================================
+   SECTION LAYOUTS & GRIDS
+   ======================================================== */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-inline: var(--space-2);
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.section-title svg {
+  width: 18px;
+  height: 18px;
+  color: var(--teal-400);
+}
+
+.section-badge {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Dual Grid: Rain & Dust */
+.grid-dual {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 540px) {
+  .grid-dual {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Details Grid: 7 Weather Metrics */
+.grid-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 520px) {
+  .grid-details {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 720px) {
+  .grid-details {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Horizontal Scroll Container (e.g. 24h Hourly) */
+.scroll-x-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  gap: var(--space-3);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-2);
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.scroll-x-item {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* ========================================================
+   FOOTER
+   ======================================================== */
+.app-footer {
+  margin-block-start: var(--space-8);
+  padding-block: var(--space-8);
+  border-block-start: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.footer-logo {
+  width: 28px;
+  height: 28px;
+}
+
+.footer-brand-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3) var(--space-5);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+}
+
+.footer-links a:hover {
+  color: var(--teal-400);
+}
+
+.footer-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 540px;
+}

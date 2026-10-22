@@ -1,0 +1,150 @@
+/**
+ * Ajwaa (أجواء) Atmosphere CSS
+ * Animated weather scene backgrounds for the hero card.
+ * High-performance GPU-accelerated CSS animations.
+ */
+
+.atmosphere-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* Atmosphere Layer Bases */
+.atmo-scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 800ms ease;
+}
+
+.atmo-scene.active {
+  opacity: 1;
+}
+
+/* ========================================================
+   1. CLEAR DAY (Sun halo & gentle warm rays)
+   ======================================================== */
+.scene-clear-day {
+  background: radial-gradient(circle at 85% 25%, rgba(242, 166, 90, 0.35) 0%, rgba(255, 209, 102, 0.15) 35%, transparent 70%);
+}
+
+.sun-halo {
+  position: absolute;
+  top: -40px;
+  inset-inline-end: -40px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 209, 102, 0.4) 0%, rgba(242, 166, 90, 0.2) 50%, transparent 70%);
+  animation: pulseSun 6s ease-in-out infinite alternate;
+}
+
+.sun-ray {
+  position: absolute;
+  top: 40px;
+  inset-inline-end: 40px;
+  width: 140px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), transparent);
+  transform-origin: left center;
+}
+
+/* ========================================================
+   2. CLEAR NIGHT (Stars & Moon glow)
+   ======================================================== */
+.scene-clear-night {
+  background: radial-gradient(circle at 85% 25%, rgba(90, 184, 232, 0.22) 0%, rgba(14, 35, 67, 0.3) 45%, transparent 70%);
+}
+
+.star {
+  position: absolute;
+  background: #FFFFFF;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+}
+
+.star-1 { top: 20%; inset-inline-start: 15%; width: 2px; height: 2px; animation: twinkle 3s ease-in-out infinite; }
+.star-2 { top: 35%; inset-inline-start: 45%; width: 3px; height: 3px; animation: twinkle 4s ease-in-out infinite 1s; }
+.star-3 { top: 15%; inset-inline-start: 65%; width: 2px; height: 2px; animation: twinkle 2.5s ease-in-out infinite 0.5s; }
+.star-4 { top: 55%; inset-inline-start: 25%; width: 2px; height: 2px; animation: twinkle 3.5s ease-in-out infinite 1.5s; }
+.star-5 { top: 70%; inset-inline-start: 75%; width: 3px; height: 3px; animation: twinkle 4.5s ease-in-out infinite 2s; }
+
+/* ========================================================
+   3. CLOUDY / OVERCAST (Drifting soft clouds)
+   ======================================================== */
+.scene-cloudy {
+  background: linear-gradient(135deg, rgba(147, 210, 243, 0.12) 0%, rgba(11, 27, 51, 0.2) 100%);
+}
+
+.cloud-drift {
+  position: absolute;
+  fill: rgba(255, 255, 255, 0.14);
+  filter: blur(4px);
+}
+
+.cloud-drift-1 {
+  top: 15%;
+  width: 180px;
+  inset-inline-start: -10%;
+  animation: driftRight 32s linear infinite;
+}
+
+.cloud-drift-2 {
+  top: 45%;
+  width: 240px;
+  inset-inline-start: -30%;
+  animation: driftRight 45s linear infinite 5s;
+  opacity: 0.8;
+}
+
+/* ========================================================
+   4. RAIN / DRIZZLE (Falling rain streaks)
+   ======================================================== */
+.scene-rain {
+  background: linear-gradient(180deg, rgba(73, 183, 216, 0.15) 0%, rgba(11, 27, 51, 0.3) 100%);
+}
+
+.rain-streak {
+  position: absolute;
+  width: 1.5px;
+  height: 28px;
+  background: linear-gradient(180deg, transparent, rgba(73, 183, 216, 0.7));
+  opacity: 0.6;
+}
+
+.rain-1 { top: -30px; inset-inline-start: 12%; animation: fallRain 1.1s linear infinite 0.1s; }
+.rain-2 { top: -30px; inset-inline-start: 28%; animation: fallRain 1.3s linear infinite 0.4s; }
+.rain-3 { top: -30px; inset-inline-start: 46%; animation: fallRain 1.0s linear infinite 0.7s; }
+.rain-4 { top: -30px; inset-inline-start: 62%; animation: fallRain 1.2s linear infinite 0.2s; }
+.rain-5 { top: -30px; inset-inline-start: 78%; animation: fallRain 1.1s linear infinite 0.5s; }
+.rain-6 { top: -30px; inset-inline-start: 92%; animation: fallRain 1.4s linear infinite 0.8s; }
+
+/* ========================================================
+   5. THUNDERSTORM
+   ======================================================== */
+.scene-thunder {
+  background: linear-gradient(180deg, rgba(142, 68, 173, 0.2) 0%, rgba(11, 27, 51, 0.45) 100%);
+  animation: lightningFlash 8s infinite;
+}
+
+/* ========================================================
+   6. DUST / SANDSTORM (Warm ochre drift)
+   ======================================================== */
+.scene-dust {
+  background: linear-gradient(135deg, rgba(224, 163, 62, 0.22) 0%, rgba(184, 115, 51, 0.16) 100%);
+}
+
+.dust-particle {
+  position: absolute;
+  background: rgba(242, 166, 90, 0.55);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.dust-1 { top: 30%; inset-inline-start: 0; width: 4px; height: 4px; animation: driftDust 8s linear infinite; }
+.dust-2 { top: 60%; inset-inline-start: 0; width: 6px; height: 6px; animation: driftDust 6s linear infinite 1.5s; }
+.dust-3 { top: 45%; inset-inline-start: 0; width: 3px; height: 3px; animation: driftDust 10s linear infinite 3s; }

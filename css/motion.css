@@ -1,0 +1,183 @@
+/**
+ * Ajwaa (أجواء) Motion & Animations CSS
+ * Keyframes, Staggered reveals, Micro-interactions, and Accessibility overrides.
+ */
+
+/* ========================================================
+   KEYFRAME ANIMATIONS
+   ======================================================== */
+
+@keyframes pulseDot {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes pulseSun {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes driftRight {
+  0% {
+    transform: translateX(-10%);
+  }
+  100% {
+    transform: translateX(110%);
+  }
+}
+
+@keyframes fallRain {
+  0% {
+    transform: translateY(0) rotate(15deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(280px) rotate(15deg);
+    opacity: 0;
+  }
+}
+
+@keyframes lightningFlash {
+  0%, 94%, 98%, 100% {
+    background-color: transparent;
+  }
+  95%, 97% {
+    background-color: rgba(255, 255, 255, 0.16);
+  }
+}
+
+@keyframes driftDust {
+  0% {
+    transform: translateX(-20px) translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(380px) translateY(-40px);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================================
+   STAGGERED SECTION ENTRANCES
+   ======================================================== */
+.fade-in-entry {
+  animation: fadeInUp var(--transition-normal) ease forwards;
+  opacity: 0;
+}
+
+.delay-1 { animation-delay: 60ms; }
+.delay-2 { animation-delay: 120ms; }
+.delay-3 { animation-delay: 180ms; }
+.delay-4 { animation-delay: 240ms; }
+.delay-5 { animation-delay: 300ms; }
+.delay-6 { animation-delay: 360ms; }
+.delay-7 { animation-delay: 420ms; }
+.delay-8 { animation-delay: 480ms; }
+
+/* ========================================================
+   ACCESSIBILITY: PREFERS REDUCED MOTION
+   ======================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .live-dot::after,
+  .sun-halo,
+  .star,
+  .cloud-drift,
+  .rain-streak,
+  .scene-thunder,
+  .dust-particle,
+  .cyclone-icon-spin,
+  .skeleton {
+    animation: none !important;
+  }
+
+  .fade-in-entry {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

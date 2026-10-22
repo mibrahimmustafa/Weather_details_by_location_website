@@ -1,0 +1,170 @@
+{
+  "project": {
+    "name": "Ajwaa (أجواء)",
+    "description": "High-performance client-side weather and live local time application built with vanilla HTML5, CSS3, and JavaScript.",
+    "version": "1.0.0",
+    "author": "Mohamed Ibrahim Mustafa",
+    "repository": "https://github.com/mibrahimmustafa/Weather_details_by_location_website.git",
+    "architecturePattern": "Layered Modular Architecture with Reactive Store and Unidirectional Data Flow"
+  },
+  "layers": [
+    {
+      "name": "Presentation Layer (View)",
+      "responsibility": "Renders UI components, captures user inputs, displays live clocks, SVG graphics, and atmospheric backgrounds.",
+      "files": [
+        { "file": "index.html", "role": "Single-page application markup shell, SEO meta tags, and script loader." },
+        { "file": "privacy.html", "role": "Dedicated bilingual privacy policy document." },
+        { "file": "terms.html", "role": "Dedicated bilingual terms of service and safety disclaimers." },
+        { "file": "css/tokens.css", "role": "Design tokens (color palettes, dark/light themes, typography, elevation, radii)." },
+        { "file": "css/base.css", "role": "CSS reset, global typography, logical properties (RTL/LTR), accessibility focus." },
+        { "file": "css/layout.css", "role": "Sticky header, application container, multi-column responsive grids, footer." },
+        { "file": "css/components.css", "role": "Glassmorphism cards, buttons, badges, hero card, bottom sheets, skeletons." },
+        { "file": "css/atmosphere.css", "role": "GPU-accelerated animated weather backgrounds (sun rays, stars, drifting clouds, rain streaks, dust particles)." },
+        { "file": "css/motion.css", "role": "Keyframe animations, staggered reveals, reduced-motion accessibility overrides." },
+        { "file": "js/components/header.js", "role": "Header bar with brand logo, live AR/EN switcher, search button, settings." },
+        { "file": "js/components/hero.js", "role": "Hero card with giant temperature, live local clock (HH:MM:SS), timezone pill, and refresh button." },
+        { "file": "js/components/alerts.js", "role": "Dynamic alert banners based on weather severity thresholds." },
+        { "file": "js/components/hourly.js", "role": "24-hour horizontal scroll timeline highlighting the current hour." },
+        { "file": "js/components/rainDust.js", "role": "Side-by-side cards for rain accumulation/dots and dust/AQI sparkline area chart." },
+        { "file": "js/components/details.js", "role": "7-tile metric grid with click-to-explain scientific advice modals." },
+        { "file": "js/components/sunPath.js", "role": "Parabolic SVG solar trajectory arc with daylight remaining calculation." },
+        { "file": "js/components/cyclones.js", "role": "Active tropical storms tracker with Haversine distance from current city." },
+        { "file": "js/components/forecast7.js", "role": "7-day forecast cards with unified normalized weekly temperature range bars." },
+        { "file": "js/components/sheets.js", "role": "Bottom sheets and modal dialogs for City Picker, Settings, Onboarding, and Explanations." },
+        { "file": "js/components/toast.js", "role": "Non-intrusive feedback snackbars." }
+      ]
+    },
+    {
+      "name": "Application & State Management Layer",
+      "responsibility": "Coordinates application lifecycle, reactive state subscriptions, user settings, and DOM syncing.",
+      "files": [
+        { "file": "js/main.js", "role": "Bootstrap coordinator, concurrent API orchestration, pull-to-refresh, lifecycle control." },
+        { "file": "js/store.js", "role": "Central reactive store implementing Subscribe/Publish and action dispatchers." },
+        { "file": "js/config.js", "role": "Configuration constants, brand metadata, storage keys, preset popular cities." },
+        { "file": "js/i18n.js", "role": "Bilingual dictionaries (Arabic RTL and English LTR) with instant translation binding." }
+      ]
+    },
+    {
+      "name": "Domain Logic Layer",
+      "responsibility": "Encapsulates meteorological formulas, thresholds, spatial calculations, and formatters.",
+      "files": [
+        { "file": "js/domain/units.js", "role": "Conversions between Metric and Imperial (C/F, km/h/mph, mm/in, hPa/inHg, Magnus dew point)." },
+        { "file": "js/domain/conditions.js", "role": "Maps WMO codes (0-99) to bilingual descriptions, atmospheric modes, and inline SVG icons." },
+        { "file": "js/domain/levels.js", "role": "Categorization and health advice for Dust (µg/m³), UV Index, and US AQI." },
+        { "file": "js/domain/alerts.js", "role": "Meteorological alert engine evaluating heatwaves, freezes, winds, downpours, dust storms, UV, and cyclones." },
+        { "file": "js/domain/geo.js", "role": "Spatial Haversine distance formula, knot-to-km/h conversion, cyclone severity classes." },
+        { "file": "js/format.js", "role": "High-precision live local city clock calculation using UTC offsets, dates via Intl, and Western digits." },
+        { "file": "js/charts.js", "role": "Handcrafted SVG sparklines, area charts, and solar path curve calculations." }
+      ]
+    },
+    {
+      "name": "Infrastructure & Data Layer",
+      "responsibility": "Network communication, API integrations, caching strategies, and persistent storage.",
+      "files": [
+        { "file": "js/storage.js", "role": "Safe localStorage wrapper, 10-minute weather cache validation, 5km distance check, FIFO prune (max 8 cities)." },
+        { "file": "js/api/http.js", "role": "Fetch client with 18-second timeout, AbortController, exponential retry backoff." },
+        { "file": "js/api/forecast.js", "role": "Open-Meteo Weather Forecast endpoint client." },
+        { "file": "js/api/airquality.js", "role": "Open-Meteo Air Quality & Dust endpoint client." },
+        { "file": "js/api/geocoding.js", "role": "City search via Open-Meteo Geocoding & reverse geocoding via BigDataCloud/Nominatim." },
+        { "file": "js/api/storms.js", "role": "NASA EONET Severe Storms API with distance sorting and graceful degradation." }
+      ]
+    }
+  ],
+  "dataFlow": {
+    "step1_init": "Main bootstrap reads saved settings and selected city from localStorage (defaults to Cairo).",
+    "step2_cacheCheck": "Checks if valid unexpired weather cache (<10 min old, within 5km) exists for the city.",
+    "step3_concurrentFetch": "If cache expired or missing, initiates Promise.allSettled across Open-Meteo Forecast, Air Quality, and NASA EONET.",
+    "step4_rawCacheStorage": "Raw API JSON responses are safely stored in localStorage under ajwaa.weather.v1.{cityId}.",
+    "step5_stateUpdate": "Store receives parsed objects, flags loading=false, and notifies all subscribed UI components.",
+    "step6_domRendering": "Components re-render hero, alerts, hourly timeline, rain/dust, details, sun arc, storms, and 7-day forecast.",
+    "step7_liveTick": "A lightweight 1-second interval updates the hero live clock (HH:MM:SS) in place without re-rendering the whole page."
+  },
+  "storageSchema": {
+    "ajwaa.settings.v1": {
+      "type": "Object",
+      "properties": {
+        "localeCode": "string ('ar' | 'en')",
+        "unitSystem": "string ('metric' | 'imperial')",
+        "themeMode": "string ('system' | 'dark' | 'light')",
+        "hasSeenWelcome": "boolean"
+      }
+    },
+    "ajwaa.cities.v1": {
+      "type": "Object",
+      "properties": {
+        "cities": "Array of City objects { id, name, nameEn, lat, lon, country, timezone }"
+      }
+    },
+    "ajwaa.selectedCity.v1": {
+      "type": "Object",
+      "description": "Active city object currently viewed by the user."
+    },
+    "ajwaa.onboardingSeen.v1": {
+      "type": "boolean",
+      "description": "Flag indicating if the user has dismissed the first-time welcome dialog."
+    },
+    "ajwaa.weather.v1.{cityId}": {
+      "type": "Object",
+      "properties": {
+        "cityId": "number | string",
+        "fetchedAt": "timestamp (ms)",
+        "latitude": "number",
+        "longitude": "number",
+        "forecast": "Open-Meteo raw forecast JSON",
+        "air": "Open-Meteo raw air quality JSON",
+        "storms": "NASA EONET raw storms JSON"
+      }
+    }
+  },
+  "apiContracts": [
+    {
+      "provider": "Open-Meteo Forecast",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "authentication": "None (Free & Open)",
+      "query": "latitude, longitude, timezone=auto, current=..., hourly=..., daily=...",
+      "transientRetry": true
+    },
+    {
+      "provider": "Open-Meteo Air Quality",
+      "url": "https://air-quality-api.open-meteo.com/v1/air-quality",
+      "authentication": "None (Free & Open)",
+      "query": "latitude, longitude, timezone=auto, current=dust,pm10,pm2_5,us_aqi,uv_index",
+      "transientRetry": true
+    },
+    {
+      "provider": "Open-Meteo Geocoding",
+      "url": "https://geocoding-api.open-meteo.com/v1/search",
+      "authentication": "None (Free & Open)",
+      "query": "name={query}&count=10&language={ar|en}&format=json"
+    },
+    {
+      "provider": "BigDataCloud Reverse Geocoding",
+      "url": "https://api-bdc.io/data/reverse-geocode-client",
+      "authentication": "None (Free & Open)",
+      "query": "latitude={lat}&longitude={lon}&localityLanguage={ar|en}"
+    },
+    {
+      "provider": "NASA EONET",
+      "url": "https://eonet.gsfc.nasa.gov/api/v3/events",
+      "authentication": "None (Free & Open)",
+      "query": "category=severeStorms&status=open&days=60"
+    }
+  ],
+  "errorHandling": {
+    "networkTimeout": "18-second timeout with AbortController, retried up to 3 times with 350ms exponential backoff.",
+    "offlineWithCache": "Displays cached weather data immediately, renders yellow offline banner informing user of cached status.",
+    "offlineWithoutCache": "Displays user-friendly error screen with clear explanation in active language and Retry button.",
+    "apiPartialFailure": "If Air Quality or NASA EONET fails, main weather forecast still renders completely; storm card displays graceful calm/unavailable state.",
+    "corruptLocalStorage": "Wrapped in try/catch; resets invalid keys to default Cairo values without throwing or halting execution."
+  },
+  "testStrategy": [
+    "Verify zero console errors on startup across Chrome, Firefox, Safari, Edge.",
+    "Test GPS location retrieval and reverse geocoding fallback.",
+    "Search global cities (Arabic and English) with debounce verification.",
+    "Verify saved cities persistence across page reloads and FIFO cache cleanup.",
+    "Test AR/EN toggle for instant text, font direction, and icon flips.",
+    "Test Metric to Imperial unit conversions across temperatures, wind, and rain.",
+    "Verify live local clock ticks every second with accurate timezone offset for foreign cities.",
+    "Test offline mode by disconnecting network to observe cached banner."
+  ]
+}
