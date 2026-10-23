@@ -68,6 +68,13 @@
 
       // Wire alert clicks to explanation sheet
       container.querySelectorAll('.alert-card').forEach(el => {
+        el.onkeydown = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            el.click();
+          }
+        };
+
         el.onclick = () => {
           const index = Number(el.getAttribute('data-alert-index'));
           const alert = alertsList[index];

@@ -10,6 +10,7 @@
 
   const Sheets = {
     searchDebounceTimer: null,
+    searchRequestId: 0,
 
     render(container, activeSheet, explanationData = null) {
       if (!activeSheet) {
@@ -321,21 +322,28 @@
 
       if (searchInput) {
         searchInput.oninput = (e) => {
-          const q = e.target.value;
+          const q = e.target.value ? e.target.value.trim() : '';
           if (this.searchDebounceTimer) clearTimeout(this.searchDebounceTimer);
 
-          if (!q || q.trim().length < 2) {
+          if (!q || q.length < 2) {
+            this.searchRequestId++;
             resultsContainer.innerHTML = '';
             resultsContainer.style.display = 'none';
             return;
           }
 
+          const currentRequestId = ++this.searchRequestId;
           this.searchDebounceTimer = setTimeout(async () => {
             resultsContainer.style.display = 'flex';
             resultsContainer.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-muted); font-size:0.85rem;">جاري البحث... / Searching...</div>`;
 
             const state = window.Ajwaa.store.getState();
             const results = await window.Ajwaa.GeocodingApi.searchCities(q, state.settings.localeCode);
+
+            // Discard response if a newer query has been dispatched
+            if (currentRequestId !== this.searchRequestId) {
+              return;
+            }
 
             if (results.length === 0) {
               resultsContainer.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-muted); font-size:0.85rem;">${window.Ajwaa.I18n.t('noResults')}</div>`;
@@ -345,7 +353,7 @@
             let resHtml = '';
             results.forEach((city, idx) => {
               resHtml += `
-                <div class="saved-city-item search-result-item" data-res-index="${idx}" style="cursor:pointer;">
+                <div class="saved-city-item search-result-item" data-res-index="${idx}" role="button" tabindex="0" style="cursor:pointer;">
                   <div style="display:flex; flex-direction:column;">
                     <span class="saved-city-name">${city.name}</span>
                     <span class="saved-city-country">${city.country} ${city.admin1 ? `· ${city.admin1}` : ''}</span>
@@ -359,12 +367,20 @@
             resultsContainer.innerHTML = resHtml;
 
             resultsContainer.querySelectorAll('.search-result-item').forEach(el => {
-              el.onclick = () => {
+              const chooseCity = () => {
                 const idx = Number(el.getAttribute('data-res-index'));
                 const chosen = results[idx];
                 if (chosen) {
                   window.Ajwaa.store.saveCity(chosen);
                   window.Ajwaa.store.selectCity(chosen);
+                }
+              };
+
+              el.onclick = chooseCity;
+              el.onkeydown = (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  chooseCity();
                 }
               };
             });

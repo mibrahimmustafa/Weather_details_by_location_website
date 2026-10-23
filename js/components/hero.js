@@ -12,6 +12,11 @@
     clockTimer: null,
 
     render(container, weatherData, city, unitSystem = 'metric', locale = 'ar', isRefreshing = false) {
+      if (this.clockTimer) {
+        clearInterval(this.clockTimer);
+        this.clockTimer = null;
+      }
+
       if (!weatherData || !weatherData.forecast || !weatherData.forecast.current) {
         container.innerHTML = `
           <div class="hero-card card skeleton skeleton-hero"></div>

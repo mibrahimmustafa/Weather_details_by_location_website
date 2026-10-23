@@ -25,16 +25,15 @@
 
       // Find current hour index based on city's time
       const cityDate = window.Ajwaa.Format.getCityDate(utcOffset);
-      const currentCityHour = cityDate.getHours();
+      const pad = n => String(n).padStart(2, '0');
+      const cityTargetPrefix = `${cityDate.getFullYear()}-${pad(cityDate.getMonth() + 1)}-${pad(cityDate.getDate())}T${pad(cityDate.getHours())}`;
 
-      // Find the slot matching current date/hour or take first 24 slots
-      let startIndex = 0;
-      for (let i = 0; i < times.length; i++) {
-        const hDate = new Date(times[i]);
-        if (hDate.getHours() === currentCityHour) {
-          startIndex = i;
-          break;
-        }
+      let startIndex = times.findIndex(t => t.startsWith(cityTargetPrefix));
+      if (startIndex === -1) {
+        // Fallback: match current hour on today or nearest slot
+        const cityHourStr = `T${pad(cityDate.getHours())}`;
+        startIndex = times.findIndex(t => t.includes(cityHourStr));
+        if (startIndex === -1) startIndex = 0;
       }
 
       const slots = [];

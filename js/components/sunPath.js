@@ -23,17 +23,27 @@
       const sunriseHm = window.Ajwaa.Format.isoToHm(sunriseIso);
       const sunsetHm = window.Ajwaa.Format.isoToHm(sunsetIso);
 
+      function isoToMinutesFromMidnight(isoStr) {
+        if (!isoStr) return 0;
+        const timePart = isoStr.includes('T') ? isoStr.split('T')[1] : isoStr;
+        const [h, m] = timePart.split(':').map(Number);
+        return (h || 0) * 60 + (m || 0);
+      }
+
       // Remaining daylight calculation
       let remainingText = '';
       if (sunriseIso && sunsetIso) {
-        const nowCity = window.Ajwaa.Format.getCityDate(utcOffset).getTime();
-        const setTime = new Date(sunsetIso).getTime();
+        const cityDate = window.Ajwaa.Format.getCityDate(utcOffset);
+        const nowMinutes = cityDate.getHours() * 60 + cityDate.getMinutes();
+        const riseMinutes = isoToMinutesFromMidnight(sunriseIso);
+        const setMinutes = isoToMinutesFromMidnight(sunsetIso);
 
-        if (nowCity < setTime && nowCity > new Date(sunriseIso).getTime()) {
-          const diffMs = setTime - nowCity;
-          const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-          const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-          remainingText = window.Ajwaa.I18n.t('daylightRemaining', { h: diffHours, m: diffMinutes });
+        const isDay = (nowMinutes >= riseMinutes && nowMinutes <= setMinutes && setMinutes > riseMinutes);
+        if (isDay && setMinutes > nowMinutes) {
+          const diffMinutes = setMinutes - nowMinutes;
+          const diffHours = Math.floor(diffMinutes / 60);
+          const remMin = diffMinutes % 60;
+          remainingText = window.Ajwaa.I18n.t('daylightRemaining', { h: diffHours, m: remMin });
         }
       }
 

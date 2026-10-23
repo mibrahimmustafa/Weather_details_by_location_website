@@ -140,8 +140,7 @@
    STAGGERED SECTION ENTRANCES
    ======================================================== */
 .fade-in-entry {
-  animation: fadeInUp var(--transition-normal) ease forwards;
-  opacity: 0;
+  animation: fadeInUp 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .delay-1 { animation-delay: 60ms; }

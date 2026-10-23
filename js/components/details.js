@@ -222,6 +222,13 @@
 
       // Wire tile click to explanation sheet
       container.querySelectorAll('.detail-tile').forEach(el => {
+        el.onkeydown = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            el.click();
+          }
+        };
+
         el.onclick = () => {
           const index = Number(el.getAttribute('data-tile-index'));
           const tile = tiles[index];

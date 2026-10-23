@@ -38,7 +38,8 @@
       const dayCount = Math.min(7, dates.length);
 
       for (let i = 0; i < dayCount; i++) {
-        const dObj = new Date(dates[i]);
+        const [y, m, d] = dates[i].split('-').map(Number);
+        const dObj = new Date(y, m - 1, d);
         let dayName = '';
 
         if (i === 0) {
@@ -112,9 +113,17 @@
 
       // Wire row clicks to day breakdown explanation sheet
       container.querySelectorAll('.forecast-day-row').forEach(el => {
+        el.onkeydown = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            el.click();
+          }
+        };
+
         el.onclick = () => {
           const index = Number(el.getAttribute('data-day-index'));
-          const dObj = new Date(dates[index]);
+          const [y, m, d] = dates[index].split('-').map(Number);
+          const dObj = new Date(y, m - 1, d);
           const dayLabel = new Intl.DateTimeFormat(locale === 'ar' ? 'ar' : 'en', { weekday: 'long', month: 'short', day: 'numeric' }).format(dObj);
           const condition = window.Ajwaa.Conditions.getCondition(codes[index], 1);
           const minDisp = window.Ajwaa.Units.formatTemp(minTemps[index], unitSystem);

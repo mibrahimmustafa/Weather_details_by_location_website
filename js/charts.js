@@ -58,24 +58,32 @@
 
     // Generates the Sun Path Arc SVG showing sunrise, sunset, and live sun position
     renderSunArcSvg(sunriseIso, sunsetIso, utcOffsetSeconds, width = 360, height = 140) {
+      function isoToMinutesFromMidnight(isoStr) {
+        if (!isoStr) return 0;
+        const timePart = isoStr.includes('T') ? isoStr.split('T')[1] : isoStr;
+        const [h, m] = timePart.split(':').map(Number);
+        return (h || 0) * 60 + (m || 0);
+      }
+
       // Default fallback
       let progress = 0.5; // 0 (sunrise) to 1 (sunset)
       let isDay = true;
 
       if (sunriseIso && sunsetIso) {
-        const nowCity = window.Ajwaa.Format.getCityDate(utcOffsetSeconds).getTime();
-        const rise = new Date(sunriseIso).getTime();
-        const set = new Date(sunsetIso).getTime();
+        const cityDate = window.Ajwaa.Format.getCityDate(utcOffsetSeconds);
+        const nowMinutes = cityDate.getHours() * 60 + cityDate.getMinutes();
+        const riseMinutes = isoToMinutesFromMidnight(sunriseIso);
+        const setMinutes = isoToMinutesFromMidnight(sunsetIso);
 
-        if (nowCity < rise) {
-          progress = 0;
-          isDay = false;
-        } else if (nowCity > set) {
+        if (nowMinutes >= riseMinutes && nowMinutes <= setMinutes && setMinutes > riseMinutes) {
+          progress = (nowMinutes - riseMinutes) / (setMinutes - riseMinutes);
+          isDay = true;
+        } else if (nowMinutes > setMinutes) {
           progress = 1;
           isDay = false;
         } else {
-          progress = Math.max(0, Math.min(1, (nowCity - rise) / (set - rise)));
-          isDay = true;
+          progress = 0;
+          isDay = false;
         }
       }
 
